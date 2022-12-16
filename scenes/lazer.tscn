@@ -1,0 +1,70 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://sprites/laser-bolts.png" type="Texture" id=1]
+[ext_resource path="res://scripts/lazer.gd" type="Script" id=2]
+
+[sub_resource type="Animation" id=1]
+length = 0.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprit:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 3, 2 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "default"
+length = 0.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprit:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 2, 3 ]
+}
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 2.5, 6 )
+
+[node name="lazer" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="sprit" type="Sprite" parent="."]
+position = Vector2( 0, 4 )
+texture = ExtResource( 1 )
+hframes = 2
+vframes = 2
+frame = 3
+
+[node name="anim" type="AnimationPlayer" parent="."]
+autoplay = "default"
+anims/RESET = SubResource( 1 )
+anims/default = SubResource( 2 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="." groups=["lazers"]]
+position = Vector2( 2.38419e-07, -98 )
+scale = Vector2( 0.1875, 0.225 )
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 0.5, 4 )
+shape = SubResource( 3 )
+
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
+[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]
